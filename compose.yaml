@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=tildDB'
+      - 'POSTGRES_PASSWORD=Moloko007'
+      - 'POSTGRES_USER=Ceeler'
+    ports:
+      - '5432'
