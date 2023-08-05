@@ -2,6 +2,7 @@ package ru.example.tild.rest.User;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,11 @@ public class UserController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<UserProfileData> getUserProfileById(@PathVariable Long id){
         return userResponseBuilder.processGetUserProfileById(id);
+    }
+
+    @GetMapping
+    public ResponseEntity<String> helloUser(){
+        return new ResponseEntity<>("Hello user", HttpStatus.OK);
     }
 
 }

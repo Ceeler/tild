@@ -15,6 +15,7 @@ import ru.example.tild.model.request.UserSignUpRequest;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -55,22 +56,22 @@ public class User {
 
 
     @OneToMany(mappedBy = "responsibleUserId")
-    private HashSet<Task> userTasks = new HashSet<>();
+    private Set<Task> userTasks;
 
     @Column(name = "user_tokens")
     @OneToMany(mappedBy = "userId")
-    private HashSet<JwtToken> tokenList;
+    private Set<JwtToken> tokenList;
 
     @Column(name = "user_projects")
     @ManyToMany
-    private HashSet<Project> userProjects;
+    private Set<Project> userProjects;
 
     @CreationTimestamp
     @Column(name = "created_at")
     private Instant createdAt;
 
     @OneToMany(mappedBy = "authorId")
-    private HashSet<DirectMessage> directMessages;
+    private Set<DirectMessage> directMessages;
 
     public User(UserSignUpRequest userSignUpRequest){
         this.name = userSignUpRequest.getName();
