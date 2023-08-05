@@ -29,6 +29,8 @@ public class UserProfileData {
 
     private Task activeTask;
 
+    private String email;
+
     private String status;
 
     private HashSet<Task> userTasks;
@@ -45,6 +47,7 @@ public class UserProfileData {
         this.nickname = user.getNickname();
         this.status = user.getStatus();
         this.createdAt = user.getCreatedAt();
+        this.email = user.getEmail();
     }
 
 }

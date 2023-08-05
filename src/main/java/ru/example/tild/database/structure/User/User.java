@@ -37,6 +37,9 @@ public class User {
     @Column(name = "user_position")
     private String position;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "password")
     private String password;
 
@@ -53,7 +56,6 @@ public class User {
     @OneToOne
     @JoinColumn(name = "user_active_task")
     private Task activeTask;
-
 
     @OneToMany(mappedBy = "responsibleUserId")
     private Set<Task> userTasks;
@@ -76,7 +78,7 @@ public class User {
     public User(UserSignUpRequest userSignUpRequest){
         this.name = userSignUpRequest.getName();
         this.surname = userSignUpRequest.getSurname();
-        this.position = userSignUpRequest.getPosition();
+        this.email = userSignUpRequest.getEmail();
         this.password = userSignUpRequest.getPassword();
         this.nickname = userSignUpRequest.getNickName();
         this.userRole = UserRole.USER;

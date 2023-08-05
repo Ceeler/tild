@@ -15,17 +15,17 @@ public class UserSignUpRequest {
 
     private String surname;
 
-    private String position;
+    private String email;
 
     private String password;
 
     private String nickName;
 
-    UserSignUpRequest(String name, String password, String surname, String nickName, String position){
+    public UserSignUpRequest(String name, String password, String surname, String nickName, String email){
         this.name = name;
         this.surname = surname;
         this.password = password;
-        this.position = position;
+        this.email = email;
         this.nickName = nickName;
     }
 
