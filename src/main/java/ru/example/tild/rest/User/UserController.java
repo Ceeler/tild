@@ -4,20 +4,33 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.example.tild.model.request.UserSignUpRequest;
+import ru.example.tild.model.response.UserPreviewInfo;
 import ru.example.tild.model.response.UserProfileData;
 
-@RestController("/user")
+import java.util.HashSet;
+
+@RestController
+@RequestMapping(path = "user")
 @AllArgsConstructor
 public class UserController {
 
     private final UserResponseBuilder userResponseBuilder;
 
-    @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/signup")
     public ResponseEntity<UserProfileData> signUpUser(@RequestBody UserSignUpRequest userSignUpRequest, HttpServletResponse response){
         return userResponseBuilder.processUserSignUp(userSignUpRequest);
     }
+
+    @GetMapping(path = "/getAllUsers")
+    public ResponseEntity<HashSet<UserPreviewInfo>> getAllUsers(){
+        return userResponseBuilder.processGetAllUsers();
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<UserProfileData> getUserProfileById(@PathVariable Long id){
+        return userResponseBuilder.processGetUserProfileById(id);
+    }
+
 }
