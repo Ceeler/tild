@@ -20,12 +20,10 @@ public class UserSignUpRequest {
     private String password;
 
     private String nickName;
-    private UserRole userRole;
 
     UserSignUpRequest(String name, String password, String surname, String nickName, String position){
         this.name = name;
         this.surname = surname;
-        this.userRole = UserRole.USER;
         this.password = password;
         this.position = position;
         this.nickName = nickName;

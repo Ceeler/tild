@@ -79,6 +79,6 @@ public class User {
         this.position = userSignUpRequest.getPosition();
         this.password = userSignUpRequest.getPassword();
         this.nickname = userSignUpRequest.getNickName();
-        this.userRole = userSignUpRequest.getUserRole();
+        this.userRole = UserRole.USER;
     }
 }
