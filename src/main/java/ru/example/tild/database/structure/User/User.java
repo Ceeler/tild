@@ -1,10 +1,7 @@
 package ru.example.tild.database.structure.User;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import ru.example.tild.database.enums.UserRole;
 import ru.example.tild.database.structure.DirectMessage.DirectMessage;
@@ -21,6 +18,7 @@ import java.util.Set;
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
 @Setter
 public class User {

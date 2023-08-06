@@ -39,6 +39,7 @@ public class TaskResponseBuilder {
             task.setAuthorId(author.get());
         }
 
+
         if(!responsibleUser.isPresent()){
             task.setResponsibleUserId(null);
         }else {
