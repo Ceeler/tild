@@ -27,13 +27,13 @@ public class UserProfileData {
 
     private String nickname;
 
-    private Task activeTask;
+    private TaskPreview activeTask;
 
     private String email;
 
     private String status;
 
-    private HashSet<Task> userTasks;
+    private HashSet<TaskPreview> userTasks;
 
     private HashSet<Project> userProjects;
 

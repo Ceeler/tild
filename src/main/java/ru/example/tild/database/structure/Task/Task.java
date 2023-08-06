@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import ru.example.tild.database.structure.Project.Project;
 import ru.example.tild.database.structure.User.User;
+import ru.example.tild.model.request.AddTaskRequest;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -31,6 +32,9 @@ public class Task {
     @Column(name = "task_description")
     private String taskDescription;
 
+    @Column(name = "estimated_time_hours")
+    private Integer estimatedTimeHours;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private User authorId;
@@ -43,8 +47,8 @@ public class Task {
     @JoinColumn(name = "responsible_user_id")
     private User responsibleUserId;
 
-    @Column(name = "ended_at")
-    private LocalDate endedAt;
+    @Column(name = "expired_at")
+    private LocalDate expiredAt;
 
     @Column(name = "created_at")
     @CreationTimestamp
@@ -54,4 +58,10 @@ public class Task {
     @UpdateTimestamp
     private Instant updatedAt;
 
+    public Task(AddTaskRequest addTaskRequest){
+        this.taskName = addTaskRequest.getTaskName();
+        this.taskDescription = addTaskRequest.getTaskDescription();
+        this.estimatedTimeHours = addTaskRequest.getEstimatedTimeHours();
+        this.expiredAt = addTaskRequest.getExpiredAt();
+    }
 }
