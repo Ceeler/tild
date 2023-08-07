@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserSignUpRequest {
+public class UserSignup {
 
     private String name;
 
@@ -19,7 +19,7 @@ public class UserSignUpRequest {
 
     private String nickName;
 
-    public UserSignUpRequest(String name, String password, String surname, String nickName, String email){
+    public UserSignup(String name, String password, String surname, String nickName, String email){
         this.name = name;
         this.surname = surname;
         this.password = password;

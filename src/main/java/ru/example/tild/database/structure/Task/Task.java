@@ -9,7 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import ru.example.tild.database.structure.Project.Project;
 import ru.example.tild.database.structure.User.User;
-import ru.example.tild.model.request.AddTaskRequest;
+import ru.example.tild.model.request.CreateTask;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -58,10 +58,10 @@ public class Task {
     @UpdateTimestamp
     private Instant updatedAt;
 
-    public Task(AddTaskRequest addTaskRequest){
-        this.taskName = addTaskRequest.getTaskName();
-        this.taskDescription = addTaskRequest.getTaskDescription();
-        this.estimatedTimeHours = addTaskRequest.getEstimatedTimeHours();
-        this.expiredAt = addTaskRequest.getExpiredAt();
+    public Task(CreateTask createTask){
+        this.taskName = createTask.getTaskName();
+        this.taskDescription = createTask.getTaskDescription();
+        this.estimatedTimeHours = createTask.getEstimatedTimeHours();
+        this.expiredAt = createTask.getExpiredAt();
     }
 }

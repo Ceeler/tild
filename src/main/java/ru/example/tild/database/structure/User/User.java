@@ -8,10 +8,9 @@ import ru.example.tild.database.structure.DirectMessage.DirectMessage;
 import ru.example.tild.database.structure.Task.Task;
 import ru.example.tild.database.structure.JwtToken.JwtToken;
 import ru.example.tild.database.structure.Project.Project;
-import ru.example.tild.model.request.UserSignUpRequest;
+import ru.example.tild.model.request.UserSignup;
 
 import java.time.Instant;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -73,12 +72,12 @@ public class User {
     @OneToMany(mappedBy = "authorId")
     private Set<DirectMessage> directMessages;
 
-    public User(UserSignUpRequest userSignUpRequest){
-        this.name = userSignUpRequest.getName();
-        this.surname = userSignUpRequest.getSurname();
-        this.email = userSignUpRequest.getEmail();
-        this.password = userSignUpRequest.getPassword();
-        this.nickname = userSignUpRequest.getNickName();
+    public User(UserSignup userSignup){
+        this.name = userSignup.getName();
+        this.surname = userSignup.getSurname();
+        this.email = userSignup.getEmail();
+        this.password = userSignup.getPassword();
+        this.nickname = userSignup.getNickName();
         this.userRole = UserRole.USER;
     }
 }

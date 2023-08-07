@@ -1,5 +1,4 @@
-package ru.example.tild.rest.User;
-
+package ru.example.tild.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -7,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.example.tild.database.structure.User.User;
 import ru.example.tild.database.structure.User.UserRepository;
-import ru.example.tild.model.request.UserSignUpRequest;
+import ru.example.tild.model.request.UserSignup;
 import ru.example.tild.model.response.UserPreviewInfo;
 import ru.example.tild.model.response.UserProfileData;
 
@@ -16,16 +15,16 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class UserResponseBuilder {
+public class UserService {
 
     private final UserRepository userRepository;
-    ResponseEntity<UserProfileData> processUserSignUp(UserSignUpRequest userSignUpRequest){
-        User user = new User(userSignUpRequest);
+    public ResponseEntity<UserProfileData> processUserSignUp(UserSignup userSignup){
+        User user = new User(userSignup);
         user = userRepository.save(user);
         return new ResponseEntity<>(new UserProfileData(user), HttpStatus.OK);
     }
 
-    ResponseEntity<HashSet<UserPreviewInfo>> processGetAllUsers(){
+    public ResponseEntity<HashSet<UserPreviewInfo>> processGetAllUsers(){
         HashSet<UserPreviewInfo> usersPreviews = new HashSet<>();
         userRepository.findAll().forEach(user -> {
             usersPreviews.add(new UserPreviewInfo(user));
@@ -33,7 +32,7 @@ public class UserResponseBuilder {
         return new ResponseEntity<>(usersPreviews, HttpStatus.OK);
     }
 
-    ResponseEntity<UserProfileData> processGetUserProfileById(Long id){
+    public ResponseEntity<UserProfileData> processGetUserProfileById(Long id){
         User user;
         Optional<User> userOptional = userRepository.findById(id);
         if(!userOptional.isPresent()){
