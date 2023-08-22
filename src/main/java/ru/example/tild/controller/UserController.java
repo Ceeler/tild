@@ -1,6 +1,7 @@
 package ru.example.tild.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping(path = "/signup")
-    public ResponseEntity<UserProfileData> signUpUser(@RequestBody UserSignup userSignup, HttpServletResponse response){
+    public ResponseEntity<UserProfileData> signUpUser(@RequestBody @Valid UserSignup userSignup, HttpServletResponse response){
         return userService.processUserSignUp(userSignup);
     }
 

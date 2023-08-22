@@ -1,20 +1,18 @@
 package ru.example.tild.model.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.example.tild.database.structure.Project.Project;
-import ru.example.tild.database.structure.Task.Task;
 import ru.example.tild.database.structure.User.User;
 
 import java.time.Instant;
 import java.util.HashSet;
 
-@Getter
-@Setter
+import static java.util.stream.Collectors.*;
+
+
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class UserProfileData {
 
     private Long id;
@@ -48,6 +46,8 @@ public class UserProfileData {
         this.status = user.getStatus();
         this.createdAt = user.getCreatedAt();
         this.email = user.getEmail();
+        this.userTasks = new HashSet<>(user.getUserTasks().stream().map(task -> new TaskPreview(task)
+        ).collect(toSet()));
     }
 
 }

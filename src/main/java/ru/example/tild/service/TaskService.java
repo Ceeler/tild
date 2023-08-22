@@ -1,5 +1,6 @@
 package ru.example.tild.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import ru.example.tild.database.structure.Task.Task;
 import ru.example.tild.database.structure.Task.TaskRepository;
 import ru.example.tild.database.structure.User.User;
 import ru.example.tild.database.structure.User.UserRepository;
+import ru.example.tild.exception.NotFoundException;
 import ru.example.tild.model.request.CreateTask;
 import ru.example.tild.model.response.TaskFullInfo;
 import ru.example.tild.model.response.TaskPreview;
@@ -24,26 +26,28 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
-
     private final ProjectRepository projectRepository;
 
+    @Transactional
     public ResponseEntity<TaskFullInfo> processAddTask(CreateTask createTask){
         Task task = new Task(createTask);
-        Optional<User> author = userRepository.findById(createTask.getAuthorId());
-        Optional<User> responsibleUser = userRepository.findById(createTask.getResponsibleUserId());
+        boolean isAuthorExist = userRepository.existsById(createTask.getAuthorId());
+        boolean isResponsibleUserExist = userRepository.existsById(createTask.getResponsibleUserId());
         Optional<Project> project = projectRepository.findById(createTask.getProjectId());
 
-        if(!author.isPresent()){
-            task.setAuthorId(null);
-        }else {
-            task.setAuthorId(author.get());
+        if(!isAuthorExist){
+            throw new NotFoundException(HttpStatus.NOT_FOUND, "ID автора не найден");
+        }
+        if(!isResponsibleUserExist){
+            throw new NotFoundException(HttpStatus.NOT_FOUND, "ID выполняющего не найден");
         }
 
-        if(!responsibleUser.isPresent()){
-            task.setResponsibleUserId(null);
-        }else {
-            task.setResponsibleUserId(responsibleUser.get());
-        }
+        User respUser = new User();
+        respUser.setId(createTask.getResponsibleUserId());
+        task.setResponsibleUserId(respUser);
+        User author = new User();
+        author.setId(createTask.getAuthorId());
+        task.setAuthorId(author);
 
         if(!project.isPresent()){
             task.setProjectId(null);
