@@ -28,7 +28,6 @@ public class TaskService {
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
 
-    @Transactional
     public ResponseEntity<TaskFullInfo> processAddTask(CreateTask createTask){
         Task task = new Task(createTask);
         boolean isAuthorExist = userRepository.existsById(createTask.getAuthorId());

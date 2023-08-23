@@ -42,4 +42,8 @@ public class UserService {
         }
         return new ResponseEntity<>(new UserProfileData(user), HttpStatus.OK);
     }
+
+    public Optional<User> findByLogin(String email){
+        return userRepository.findByEmail(email);
+    }
 }
