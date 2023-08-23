@@ -30,23 +30,19 @@ public class TaskService {
 
     public ResponseEntity<TaskFullInfo> processAddTask(CreateTask createTask){
         Task task = new Task(createTask);
-        boolean isAuthorExist = userRepository.existsById(createTask.getAuthorId());
-        boolean isResponsibleUserExist = userRepository.existsById(createTask.getResponsibleUserId());
+        Optional<User> author = userRepository.findById(createTask.getAuthorId());
+        Optional<User> responsibleUser = userRepository.findById(createTask.getResponsibleUserId());
         Optional<Project> project = projectRepository.findById(createTask.getProjectId());
 
-        if(!isAuthorExist){
+        if(!author.isPresent()){
             throw new NotFoundException(HttpStatus.NOT_FOUND, "ID автора не найден");
         }
-        if(!isResponsibleUserExist){
+        if(!responsibleUser.isPresent()){
             throw new NotFoundException(HttpStatus.NOT_FOUND, "ID выполняющего не найден");
         }
 
-        User respUser = new User();
-        respUser.setId(createTask.getResponsibleUserId());
-        task.setResponsibleUserId(respUser);
-        User author = new User();
-        author.setId(createTask.getAuthorId());
-        task.setAuthorId(author);
+        task.setResponsibleUserId(responsibleUser.get());
+        task.setAuthorId(author.get());
 
         if(!project.isPresent()){
             task.setProjectId(null);
