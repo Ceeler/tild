@@ -8,7 +8,9 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.example.tild.database.enums.UserRole;
 import ru.example.tild.database.structure.User.User;
+import ru.example.tild.model.JwtAuthentication;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
@@ -16,7 +18,10 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -38,11 +43,12 @@ public class JwtUtils {
         final Instant accessExpirationInstant = now.plusMinutes(30).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
 
-        return Jwts.builder().setSubject(user.getEmail())
+        return Jwts.builder()
+                .setSubject(user.getUsername())
                 .setExpiration(accessExpiration)
                 .signWith(jwtAccessSecret)
                 .claim("role", user.getUserRole())
-                .claim("firstName", user.getName())
+                .claim("firstName", user.getFirstName())
                 .compact();
     }
 
@@ -86,4 +92,19 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+    public static JwtAuthentication generate(Claims claims) {
+        final JwtAuthentication jwtInfoToken = new JwtAuthentication();
+        jwtInfoToken.setRole(getRole(claims));
+        jwtInfoToken.setFirstName(claims.get("firstName", String.class));
+        jwtInfoToken.setUsername(claims.getSubject());
+        return jwtInfoToken;
+    }
+
+    private static UserRole getRole(Claims claims) {
+        final UserRole role = claims.get("roles", UserRole.class);
+        return role;
+    }
+
+
 }

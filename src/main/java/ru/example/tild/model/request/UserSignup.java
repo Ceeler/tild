@@ -13,26 +13,26 @@ import lombok.Setter;
 public class UserSignup {
     @NotBlank(message = "Имя пользователя не может быть пустым")
     @Pattern(regexp = "^[a-zA-Zа-яА-Я]{1,15}$", message = "Некорректное имя пользователя")
-    private String name;
+    private String firstName;
     @Pattern(regexp = "^[a-zA-Zа-яА-Я ]{0,15}$", message = "Некорректное имя пользователя")
-    private String surname;
+    private String lastName;
     @NotBlank(message = "Почта не может быть пустой")
     @Email(message = "Не верный почтовый адрес")
     private String email;
 
     @NotBlank(message = "Никнейм не может быть пустым")
     @Pattern(regexp = "^[a-zA-Z]{4,16}$", message = "Некорректный никнейм")
-    private String nickName;
+    private String username;
 
     @NotBlank(message = "Пароль не может быть пустым")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,32}$", message = "Некорректный пароль")
     private String password;
 
-    public UserSignup(String name, String password, String surname, String nickName, String email){
-        this.name = name;
-        this.surname = surname;
+    public UserSignup(String firstName, String password, String lastName, String username, String email){
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.password = password;
         this.email = email;
-        this.nickName = nickName;
+        this.username = username;
     }
 }

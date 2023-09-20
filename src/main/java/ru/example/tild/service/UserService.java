@@ -3,6 +3,7 @@ package ru.example.tild.service;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.example.tild.database.structure.User.User;
 import ru.example.tild.database.structure.User.UserRepository;
@@ -18,8 +19,11 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
     public ResponseEntity<UserProfileData> processUserSignUp(UserSignup userSignup){
         User user = new User(userSignup);
+        user.setPassword(passwordEncoder.encode(userSignup.getPassword()));
         user = userRepository.save(user);
         return new ResponseEntity<>(new UserProfileData(user), HttpStatus.OK);
     }

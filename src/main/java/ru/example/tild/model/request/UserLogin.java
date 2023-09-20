@@ -22,4 +22,5 @@ public class UserLogin {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,32}$", message = "Некорректный пароль")
     private String password;
 
+    private String fingerprint;
 }

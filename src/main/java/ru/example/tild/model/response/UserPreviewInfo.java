@@ -21,8 +21,8 @@ public class UserPreviewInfo {
     private Long id;
 
     public UserPreviewInfo(User user){
-        this.name = user.getName();
-        this.surname = user.getSurname();
+        this.name = user.getFirstName();
+        this.surname = user.getLastName();
         this.status = user.getStatus();
         this.id = user.getId();
     }

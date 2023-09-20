@@ -14,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class JwtToken {
 
     @Id
@@ -25,20 +26,21 @@ public class JwtToken {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
 
     private String useragent;
     private String fingerprint;
     @Column(name = "expires_in")
-    private int expiresIn;
+    private Long expiresIn;
 
     @CreationTimestamp
     private Instant createdAt;
 
-    public JwtToken(UUID refreshToken, User userId, int expiresIn, String fingerprint) {
-        this.refreshToken = refreshToken;
-        this.userId = userId;
+    public JwtToken(String refreshToken, User user, Long expiresIn, String fingerprint) {
+        this.refreshToken = UUID.fromString(refreshToken);
+        this.user = user;
         this.expiresIn = expiresIn;
         this.fingerprint = fingerprint;
     }
+
 }

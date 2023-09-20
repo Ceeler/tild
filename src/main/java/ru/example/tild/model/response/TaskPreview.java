@@ -28,8 +28,8 @@ public class TaskPreview {
     public TaskPreview(Task task){
         this.id = task.getId();
         this.taskName = task.getTaskName();
-        this.estimatedTimeHours = task.getEstimatedTimeHours();
-        this.authorId = new UserPreviewInfo(task.getAuthorId());
-        this.expiredAt = task.getExpiredAt();
+        //this.estimatedTimeHours = task.getEstimatedTimeHours();
+        this.authorId = new UserPreviewInfo(task.getAuthor());
+       // this.expiredAt = task.getExpiredAt();
     }
 }

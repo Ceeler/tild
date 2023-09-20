@@ -40,8 +40,8 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "nickname", unique = true, nullable = false)
-    private String nickname;
+    @Column(name = "username", unique = true, nullable = false)
+    private String username;
 
     @Column(name = "user_role")
     @Enumerated(value = EnumType.STRING)
@@ -58,7 +58,7 @@ public class User {
     private Set<Task> userTasks;
 
     @Column(name = "user_jwt")
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "user")
     private Set<JwtToken> tokenList;
 
     @Column(name = "user_projects")
@@ -77,11 +77,11 @@ public class User {
     private Set<DirectMessage> directMessages;
 
     public User(UserSignup userSignup){
-        this.firstName = userSignup.getName();
-        this.lastName = userSignup.getSurname();
+        this.firstName = userSignup.getFirstName();
+        this.lastName = userSignup.getLastName();
         this.email = userSignup.getEmail();
         this.password = userSignup.getPassword();
-        this.nickname = userSignup.getNickName();
+        this.username = userSignup.getUsername();
         this.userRole = UserRole.USER;
     }
 }

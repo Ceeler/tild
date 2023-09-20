@@ -2,10 +2,12 @@ package ru.example.tild.model.response;
 
 import lombok.*;
 import ru.example.tild.database.structure.Project.Project;
+import ru.example.tild.database.structure.Task.Task;
 import ru.example.tild.database.structure.User.User;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Set;
 
 import static java.util.stream.Collectors.*;
 
@@ -39,15 +41,21 @@ public class UserProfileData {
 
     public UserProfileData(User user){
         this.id = user.getId();
-        this.name = user.getName();
-        this.surname = user.getSurname();
-        this.position = user.getPosition();
-        this.nickname = user.getNickname();
+        this.name = user.getFirstName();
+        this.surname = user.getLastName();
+        this.position = user.getUserPosition();
+        this.nickname = user.getUsername();
         this.status = user.getStatus();
         this.createdAt = user.getCreatedAt();
         this.email = user.getEmail();
-        this.userTasks = new HashSet<>(user.getUserTasks().stream().map(task -> new TaskPreview(task)
+        Set<Task> tasks = user.getUserTasks();
+        //TODO make another
+        if(tasks != null) {
+        this.userTasks = new HashSet<>(tasks.stream().map(task -> new TaskPreview(task)
         ).collect(toSet()));
+        } else {
+            this.userTasks = new HashSet<>();
+        }
     }
 
 }

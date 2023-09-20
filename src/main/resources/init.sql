@@ -2,7 +2,7 @@ DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
 
 CREATE SEQUENCE users_seq START 1 INCREMENT 50;
-CREATE TYPE userRole AS enum ('User', 'Admin');
+-- CREATE TYPE userRole AS enum ('User', 'Admin');
 CREATE TABLE IF NOT EXISTS users(
     id BIGINT NOT NULL PRIMARY KEY DEFAULT NEXTVAL('users_seq'),
     first_name CHARACTER VARYING(64) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users(
     user_position CHARACTER VARYING(64),
     description CHARACTER VARYING(128),
     status CHARACTER VARYING(32),
-    user_role userRole NOT NULL DEFAULT 'User',
+    user_role CHARACTER VARYING(32) NOT NULL DEFAULT 'User',
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
     );
