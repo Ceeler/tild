@@ -25,18 +25,18 @@ public class ProjectMessage {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "text")
+    @Column(name = "project_text")
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
-    private Project projectId;
+    private Project project;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
-    private User authorId;
+    private User author;
 
-    @OneToMany(mappedBy = "projectMessage")
+    @OneToMany(mappedBy = "projectMessage", fetch = FetchType.LAZY)
     private HashSet<Comment> comments;
 
     @Column(name = "created_at")

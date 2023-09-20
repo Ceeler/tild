@@ -25,7 +25,7 @@ public class Comment {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "text")
+    @Column(name = "comment_text")
     private String text;
 
     @ManyToOne

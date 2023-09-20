@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Getter
@@ -22,10 +24,6 @@ public class CreateTask {
 
     private Long projectId;
 
-    private Long responsibleUserId;
-
-    private LocalDate expiredAt;
-
-    private Integer estimatedTimeHours;
+    private Set<Long> executorsId = new HashSet<>();
 
 }

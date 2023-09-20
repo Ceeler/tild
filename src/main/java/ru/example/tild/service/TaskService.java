@@ -28,33 +28,18 @@ public class TaskService {
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
 
-    public ResponseEntity<TaskFullInfo> processAddTask(CreateTask createTask){
+    @Transactional
+    public ResponseEntity<TaskFullInfo> addTask(CreateTask createTask){
         Task task = new Task(createTask);
-        Optional<User> author = userRepository.findById(createTask.getAuthorId());
-        Optional<User> responsibleUser = userRepository.findById(createTask.getResponsibleUserId());
-        Optional<Project> project = projectRepository.findById(createTask.getProjectId());
-
-        if(!author.isPresent()){
-            throw new NotFoundException(HttpStatus.NOT_FOUND, "ID автора не найден");
+        for(Long executorId : createTask.getExecutorsId()){
+            task.addExecutor(userRepository.getReferenceById(executorId));
         }
-        if(!responsibleUser.isPresent()){
-            throw new NotFoundException(HttpStatus.NOT_FOUND, "ID выполняющего не найден");
-        }
-
-        task.setResponsibleUserId(responsibleUser.get());
-        task.setAuthorId(author.get());
-
-        if(!project.isPresent()){
-            task.setProjectId(null);
-        }else {
-            task.setProjectId(project.get());
-        }
-
-        task = taskRepository.save(task);
+        task.setAuthor(userRepository.getReferenceById(createTask.getAuthorId()));
+        task.setProject(projectRepository.getReferenceById(createTask.getProjectId()));
         return new ResponseEntity<>(new TaskFullInfo(task), HttpStatus.OK);
     }
 
-    public ResponseEntity<HashSet<TaskPreview>> processGetAllTasks(){
+    public ResponseEntity<HashSet<TaskPreview>> getAllTasks(){
         HashSet<TaskPreview> tasks = new HashSet<>();
         taskRepository.findAll().forEach(task -> {
             tasks.add(new TaskPreview(task));

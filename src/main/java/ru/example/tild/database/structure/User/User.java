@@ -3,6 +3,7 @@ package ru.example.tild.database.structure.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import ru.example.tild.database.enums.UserRole;
 import ru.example.tild.database.structure.DirectMessage.DirectMessage;
 import ru.example.tild.database.structure.Task.Task;
@@ -17,7 +18,6 @@ import java.util.Set;
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
 @Setter
 public class User {
@@ -25,14 +25,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false, name = "user_name")
-    private String name;
+    @Column(nullable = false, name = "first_name")
+    private String firstName;
 
-    @Column(name = "user_surname")
-    private String surname;
+    @Column(name = "last_name")
+    private String lastName;
 
     @Column(name = "user_position")
-    private String position;
+    private String userPosition;
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
@@ -50,31 +50,35 @@ public class User {
     @Column(name = "status")
     private String status;
 
-    @OneToOne
-    @JoinColumn(name = "user_active_task")
-    private Task activeTask;
+//    @OneToOne
+//    @JoinColumn(name = "user_active_task")
+//    private Task activeTask;
 
-    @OneToMany(mappedBy = "responsibleUserId")
+    @ManyToMany(mappedBy = "executors", fetch = FetchType.LAZY)
     private Set<Task> userTasks;
 
-    @Column(name = "user_tokens")
+    @Column(name = "user_jwt")
     @OneToMany(mappedBy = "userId")
     private Set<JwtToken> tokenList;
 
     @Column(name = "user_projects")
-    @ManyToMany
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private Set<Project> userProjects;
 
     @CreationTimestamp
     @Column(name = "created_at")
     private Instant createdAt;
 
-    @OneToMany(mappedBy = "authorId")
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Instant updatedAt;
+
+    @OneToMany(mappedBy = "author")
     private Set<DirectMessage> directMessages;
 
     public User(UserSignup userSignup){
-        this.name = userSignup.getName();
-        this.surname = userSignup.getSurname();
+        this.firstName = userSignup.getName();
+        this.lastName = userSignup.getSurname();
         this.email = userSignup.getEmail();
         this.password = userSignup.getPassword();
         this.nickname = userSignup.getNickName();

@@ -13,6 +13,8 @@ import ru.example.tild.model.request.CreateTask;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tasks")
@@ -32,23 +34,26 @@ public class Task {
     @Column(name = "task_description")
     private String taskDescription;
 
-    @Column(name = "estimated_time_hours")
-    private Integer estimatedTimeHours;
+//    @Column(name = "estimated_time_hours")
+//    private Integer estimatedTimeHours;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
-    private User authorId;
+    private User author;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
-    private Project projectId;
+    private Project project;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "responsible_user_id")
-    private User responsibleUserId;
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_task",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "task_id")}
+    )
+    private List<User> executors;
 
-    @Column(name = "expired_at")
-    private LocalDate expiredAt;
+//    @Column(name = "expired_at")
+//    private LocalDate expiredAt;
 
     @Column(name = "created_at")
     @CreationTimestamp
@@ -61,7 +66,13 @@ public class Task {
     public Task(CreateTask createTask){
         this.taskName = createTask.getTaskName();
         this.taskDescription = createTask.getTaskDescription();
-        this.estimatedTimeHours = createTask.getEstimatedTimeHours();
-        this.expiredAt = createTask.getExpiredAt();
+        this.executors = new ArrayList<>();
+        //this.estimatedTimeHours = createTask.getEstimatedTimeHours();
+        //this.expiredAt = createTask.getExpiredAt();
     }
+
+    public void addExecutor(User executor){
+        executors.add(executor);
+    }
+
 }

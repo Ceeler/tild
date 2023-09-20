@@ -14,6 +14,7 @@ import ru.example.tild.database.structure.ProjectMassage.ProjectMessage;
 import java.time.*;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "projects")
@@ -34,14 +35,17 @@ public class Project {
     private String projectDescription;
 
     @Column(name = "project_tasks")
-    @OneToMany(mappedBy = "projectId")
-    private HashSet<Task> projectTasks;
+    @OneToMany(mappedBy = "project")
+    private Set<Task> projectTasks;
 
-    @Column(name = "project_participants")
-    @ManyToMany
-    private HashSet<User> projectParticipants;
+    @Column(name = "ended_at")
+    private LocalDate endedAt;
 
-    @OneToMany(mappedBy = "projectId")
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_project")
+    private HashSet<User> users;
+
+    @OneToMany(mappedBy = "project")
     private LinkedHashSet<ProjectMessage> projectMessages;
 
     @Column(name = "created_at")
@@ -52,6 +56,4 @@ public class Project {
     @UpdateTimestamp
     private Instant updatedAt;
 
-    @Column(name = "ended_at")
-    private LocalDate endedAt;
 }

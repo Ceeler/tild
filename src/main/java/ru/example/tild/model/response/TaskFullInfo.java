@@ -13,6 +13,8 @@ import ru.example.tild.database.structure.User.User;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @AllArgsConstructor
@@ -27,15 +29,15 @@ public class TaskFullInfo {
 
     private String taskDescription;
 
-    private Integer estimatedTimeHours;
+    //private Integer estimatedTimeHours;
 
-    private UserPreviewInfo authorId;
+    private UserPreviewInfo author;
 
-    private Project projectId;
+    private Project project;
 
-    private UserPreviewInfo responsibleUserId;
+    private List<UserPreviewInfo> executors;
 
-    private LocalDate expiredAt;
+    //private LocalDate expiredAt;
 
     private Instant createdAt;
 
@@ -45,11 +47,11 @@ public class TaskFullInfo {
         this.id = task.getId();
         this.taskName = task.getTaskName();
         this.taskDescription = task.getTaskDescription();
-        this.estimatedTimeHours = task.getEstimatedTimeHours();
-        this.authorId = new UserPreviewInfo(task.getAuthorId());
-        this.projectId = task.getProjectId();
-        this.responsibleUserId = new UserPreviewInfo(task.getResponsibleUserId());
-        this.expiredAt = task.getExpiredAt();
+        //this.estimatedTimeHours = task.getEstimatedTimeHours();
+        this.author = new UserPreviewInfo(task.getAuthor());
+        this.project = task.getProject();
+        this.executors = task.getExecutors().stream().map(user -> new UserPreviewInfo(user)).collect(Collectors.toList());
+        //this.expiredAt = task.getExpiredAt();
         this.createdAt = task.getCreatedAt();
         this.updatedAt = task.getUpdatedAt();
     }

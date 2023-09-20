@@ -20,13 +20,13 @@ public class UserSignup {
     @Email(message = "Не верный почтовый адрес")
     private String email;
 
-    @NotBlank(message = "Пароль не может быть пустым")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,32}$", message = "Некорректный пароль")
-    private String password;
-
     @NotBlank(message = "Никнейм не может быть пустым")
     @Pattern(regexp = "^[a-zA-Z]{4,16}$", message = "Некорректный никнейм")
     private String nickName;
+
+    @NotBlank(message = "Пароль не может быть пустым")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,32}$", message = "Некорректный пароль")
+    private String password;
 
     public UserSignup(String name, String password, String surname, String nickName, String email){
         this.name = name;
@@ -35,5 +35,4 @@ public class UserSignup {
         this.email = email;
         this.nickName = nickName;
     }
-
 }

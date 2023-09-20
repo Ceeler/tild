@@ -18,12 +18,12 @@ public class TaskController {
     private final TaskService taskService;
     @PostMapping(path = "/create")
     public ResponseEntity<TaskFullInfo> addTask(@RequestBody CreateTask createTask){
-        return taskService.processAddTask(createTask);
+        return taskService.addTask(createTask);
     }
 
     @GetMapping(path = "/getAll")
     public ResponseEntity<HashSet<TaskPreview>> getAllTasks(){
-        return taskService.processGetAllTasks();
+        return taskService.getAllTasks();
     }
 
 }

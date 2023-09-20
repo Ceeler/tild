@@ -21,7 +21,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping(path = "/signup")
-    public ResponseEntity<UserProfileData> signUpUser(@RequestBody @Valid UserSignup userSignup, HttpServletResponse response){
+    public ResponseEntity<UserProfileData> signUpUser(@RequestBody UserSignup userSignup, HttpServletResponse response){
+        response.getStatus();
         return userService.processUserSignUp(userSignup);
     }
 
@@ -31,7 +32,8 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<UserProfileData> getUserProfileById(@PathVariable Long id){
+    public ResponseEntity<UserProfileData> getUserProfileById(@PathVariable Long id, HttpServletResponse response){
+        response.getStatus();
         return userService.processGetUserProfileById(id);
     }
 
