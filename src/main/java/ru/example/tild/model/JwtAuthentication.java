@@ -18,7 +18,7 @@ public class JwtAuthentication implements Authentication {
 
     private boolean authenticated;
     private String username;
-    private String firstName;
+    private Long id;
     private UserRole role;
 
     @Override
@@ -53,6 +53,6 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public String getName() {
-        return firstName;
+        return username;
     }
 }

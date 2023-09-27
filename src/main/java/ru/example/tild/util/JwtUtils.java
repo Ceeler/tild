@@ -38,9 +38,14 @@ public class JwtUtils {
         this.jwtRefreshSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtRefreshSecret));
     }
 
-    public String generateAccessToken(@NonNull User user){
+    public String generateAccessToken(@NonNull User user, Instant expireAt){
         final LocalDateTime now = LocalDateTime.now();
-        final Instant accessExpirationInstant = now.plusMinutes(30).atZone(ZoneId.systemDefault()).toInstant();
+        final Instant accessExpirationInstant;
+        if(expireAt == null){
+            accessExpirationInstant = now.plusMinutes(30).atZone(ZoneId.systemDefault()).toInstant();
+        } else {
+            accessExpirationInstant = expireAt;
+        }
         final Date accessExpiration = Date.from(accessExpirationInstant);
 
         return Jwts.builder()
@@ -48,7 +53,7 @@ public class JwtUtils {
                 .setExpiration(accessExpiration)
                 .signWith(jwtAccessSecret)
                 .claim("role", user.getUserRole())
-                .claim("firstName", user.getFirstName())
+                .claim("id", user.getId())
                 .compact();
     }
 
@@ -96,13 +101,13 @@ public class JwtUtils {
     public static JwtAuthentication generate(Claims claims) {
         final JwtAuthentication jwtInfoToken = new JwtAuthentication();
         jwtInfoToken.setRole(getRole(claims));
-        jwtInfoToken.setFirstName(claims.get("firstName", String.class));
+        jwtInfoToken.setId(claims.get("id", Long.class));
         jwtInfoToken.setUsername(claims.getSubject());
         return jwtInfoToken;
     }
 
     private static UserRole getRole(Claims claims) {
-        final UserRole role = claims.get("roles", UserRole.class);
+        final UserRole role = claims.get("role", UserRole.class);
         return role;
     }
 

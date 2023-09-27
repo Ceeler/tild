@@ -1,5 +1,8 @@
 package ru.example.tild.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -16,27 +19,38 @@ import java.util.HashSet;
 @RestController
 @RequestMapping(path = "user")
 @AllArgsConstructor
+@Tag(name="Пользователи", description="Взаимодействие с пользователем")
 public class UserController {
 
     private final UserService userService;
 
+    @Operation(summary = "Зарегистрироваться", description = "Зарегистрироваться в проекте")
     @PostMapping(path = "/signup")
     public ResponseEntity<UserProfileData> signUpUser(@RequestBody UserSignup userSignup, HttpServletResponse response){
         response.getStatus();
-        return userService.processUserSignUp(userSignup);
+        return userService.userSignUp(userSignup);
     }
 
+
+    @SecurityRequirement(name = "JWT")
+    @Operation(summary = "Получить всех юзеров", description = "Позволяет получить всех юзеров из БД")
     @GetMapping(path = "/getAllUsers")
     public ResponseEntity<HashSet<UserPreviewInfo>> getAllUsers(){
-        return userService.processGetAllUsers();
+        return userService.getAllUsers();
     }
 
+
+    @SecurityRequirement(name = "JWT")
+    @Operation(summary = "Получить профиль", description = "Позволяет получить данные профиля по id")
     @GetMapping(path = "/{id}")
     public ResponseEntity<UserProfileData> getUserProfileById(@PathVariable Long id, HttpServletResponse response){
         response.getStatus();
-        return userService.processGetUserProfileById(id);
+        return userService.getUserProfileById(id);
     }
 
+
+    @SecurityRequirement(name = "JWT")
+    @Operation(summary = "Привет)", description = "HELLO MIR MANERA")
     @GetMapping
     public ResponseEntity<String> helloUser(){
         return new ResponseEntity<>("Hello user", HttpStatus.OK);

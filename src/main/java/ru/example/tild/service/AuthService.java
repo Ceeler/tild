@@ -13,6 +13,8 @@ import ru.example.tild.database.structure.User.User;
 import ru.example.tild.model.JwtAuthentication;
 import ru.example.tild.model.request.UserLogin;
 import ru.example.tild.model.response.JwtData;
+import ru.example.tild.model.response.LoginResponse;
+import ru.example.tild.model.response.UserProfileData;
 import ru.example.tild.util.JwtUtils;
 
 import java.time.Instant;
@@ -30,12 +32,15 @@ public class AuthService {
 
     private static final int REFRESH_TOKEN_TIME = 1*60*60*24*30;
 
-    public ResponseEntity<JwtData> login(UserLogin userLogin, String ua) throws AuthException {
+    private static final int ACCESS_TOKEN_TIME = 1*60*30;
+
+    public ResponseEntity<LoginResponse> login(UserLogin userLogin, String ua) throws AuthException {
         User user = userService.findByEmail(userLogin.getEmail())
                 .orElseThrow(() -> new AuthException("Пользователь не найден"));
 
         if(passwordEncoder.matches(userLogin.getPassword(), user.getPassword())) {
-            String accessToken = jwtUtils.generateAccessToken(user);
+            Instant accessExpire = Instant.now().plusSeconds(ACCESS_TOKEN_TIME);
+            String accessToken = jwtUtils.generateAccessToken(user, accessExpire);
             UUID refreshToken = jwtUtils.generateRefreshToken();
             Long refreshExpire = Instant.now().plusSeconds(REFRESH_TOKEN_TIME).getEpochSecond();
             JwtToken jwtToken = JwtToken.builder()
@@ -52,9 +57,10 @@ public class AuthService {
                     .maxAge(refreshExpire).build();
 //                    .domain(".tild.space")
 //                    .path("/auth").build();
-
+            UserProfileData userProfileData = new UserProfileData(user);
+            JwtData jwtData = new JwtData(accessToken, refreshToken.toString(), accessExpire);
             return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                    .body(new JwtData(accessToken, refreshToken.toString()));
+                    .body(new LoginResponse(jwtData, userProfileData));
         } else {
             throw new AuthException("Не правильный пароль");
         }
@@ -91,7 +97,8 @@ public class AuthService {
                 .user(jwtTokenOld.getUser())
                 .build();
 
-        String accessToken = jwtUtils.generateAccessToken(jwtTokenOld.getUser());
+        Instant accessExpire = Instant.now().plusSeconds(ACCESS_TOKEN_TIME);
+        String accessToken = jwtUtils.generateAccessToken(jwtTokenOld.getUser(), accessExpire);
 
         jwtTokenRepository.save(newJwtToken);
 
@@ -102,7 +109,7 @@ public class AuthService {
                 .path("/auth").build();
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(new JwtData(accessToken, newRefreshToken.toString()));
+                .body(new JwtData(accessToken, newRefreshToken.toString(), accessExpire));
     }
 
     public JwtAuthentication getAuthInfo() {

@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.example.tild.database.structure.Project.Project;
 import ru.example.tild.database.structure.Project.ProjectRepository;
@@ -29,11 +30,12 @@ public class TaskService {
     private final ProjectRepository projectRepository;
 
     @Transactional
-    public ResponseEntity<TaskFullInfo> addTask(CreateTask createTask){
+    public ResponseEntity<TaskFullInfo> addTask(CreateTask createTask, UserDetails userDetails){
         Task task = new Task(createTask);
         for(Long executorId : createTask.getExecutorsId()){
             task.addExecutor(userRepository.getReferenceById(executorId));
         }
+        userDetails.getUsername();
         task.setAuthor(userRepository.getReferenceById(createTask.getAuthorId()));
         task.setProject(projectRepository.getReferenceById(createTask.getProjectId()));
         return new ResponseEntity<>(new TaskFullInfo(task), HttpStatus.OK);

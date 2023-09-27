@@ -21,14 +21,14 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
-    public ResponseEntity<UserProfileData> processUserSignUp(UserSignup userSignup){
+    public ResponseEntity<UserProfileData> userSignUp(UserSignup userSignup){
         User user = new User(userSignup);
         user.setPassword(passwordEncoder.encode(userSignup.getPassword()));
         user = userRepository.save(user);
         return new ResponseEntity<>(new UserProfileData(user), HttpStatus.OK);
     }
 
-    public ResponseEntity<HashSet<UserPreviewInfo>> processGetAllUsers(){
+    public ResponseEntity<HashSet<UserPreviewInfo>> getAllUsers(){
         HashSet<UserPreviewInfo> usersPreviews = new HashSet<>();
         userRepository.findAll().forEach(user -> {
             usersPreviews.add(new UserPreviewInfo(user));
@@ -36,7 +36,7 @@ public class UserService {
         return new ResponseEntity<>(usersPreviews, HttpStatus.OK);
     }
 
-    public ResponseEntity<UserProfileData> processGetUserProfileById(Long id){
+    public ResponseEntity<UserProfileData> getUserProfileById(Long id){
         User user;
         Optional<User> userOptional = userRepository.findById(id);
         if(!userOptional.isPresent()){

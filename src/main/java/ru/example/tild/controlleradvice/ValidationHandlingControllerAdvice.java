@@ -1,5 +1,7 @@
 package ru.example.tild.controlleradvice;
 
+import io.jsonwebtoken.JwtException;
+import jakarta.security.auth.message.AuthException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -51,5 +53,16 @@ public class ValidationHandlingControllerAdvice {
 //        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 //    }
 
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<String> onAuthException(
+            AuthException e
+    ){
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<String> onJwtException( JwtException e){
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    }
 
 }

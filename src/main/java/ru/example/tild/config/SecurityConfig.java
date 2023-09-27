@@ -1,4 +1,4 @@
-package ru.example.tild.security;
+package ru.example.tild.config;
 
 
 import lombok.RequiredArgsConstructor;
@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ru.example.tild.security.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -24,7 +25,8 @@ public class SecurityConfig {
         return http
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .authorizeHttpRequests(requests ->
-                        requests.requestMatchers("/auth/**","/user/signup", "/swagger-ui.html").permitAll()
+                        requests.requestMatchers("/auth/**","/user/signup",
+                                        "/swagger", "/swagger-ui/**", "/swagger-ui/index.html", "/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated())
                         .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
